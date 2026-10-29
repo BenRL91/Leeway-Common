@@ -1,0 +1,17 @@
+{
+  "name": "@leewaypb/library",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/build.mjs && node --test tests/*.test.mjs",
+    "db:generate": "drizzle-kit generate",
+    "pack:notifications": "node scripts/pack.mjs"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.10",
+    "drizzle-orm": "0.45.2",
+    "linkedom": "0.18.13"
+  }
+}

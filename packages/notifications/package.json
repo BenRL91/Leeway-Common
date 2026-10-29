@@ -1,0 +1,33 @@
+{
+  "name": "@leewaypb/notifications",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "island.js",
+    "transport.js",
+    "producer.mjs",
+    "index.d.ts",
+    "transport.d.ts",
+    "producer.d.ts",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./island.js"
+    },
+    "./transport": {
+      "types": "./transport.d.ts",
+      "import": "./transport.js"
+    },
+    "./producer": {
+      "types": "./producer.d.ts",
+      "import": "./producer.mjs"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "types": "./index.d.ts"
+}
