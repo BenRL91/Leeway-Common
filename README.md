@@ -1,32 +1,66 @@
-# LeewayPB Library — 0.1.0
+# Leeway Common
 
-One curated module: **Notifications**. Framework-independent Shadow DOM island, supporting notification service, owner-protected demonstration, and worker handoffs. No GitHub integration, registry account, third-party delivery provider, or shared-auth changes.
+**Shared notification infrastructure for independently released LeewayPB apps.**
 
-## Status
+Leeway Common packages a framework-independent notification inbox with a dedicated service for events, preferences and read state. It gives host applications a consistent notification interface while leaving destination authorization with the application that owns the underlying content.
 
-| Part | Status |
-|---|---|
-| Bell, inbox, read/unread, preferences, lifecycle | Implemented |
-| Dedicated Sites Worker + D1 storage | Implemented |
-| Supabase `getUser` validation + per-destination access | Implemented |
-| Replay released-review and visible-discussion access adapter | Implemented against existing read-only routes; test doubles verified |
-| Replay event generation/outbox, app mounting, deep-link consumer | Published by Replay worker at `7220e2b`; disabled pending its activation |
-| Coaching mounting/events/admission/access adapter | Proposed worker handoff |
-| PaddleLog and Pickle Point mounting | Proposed worker handoffs; no event catalogs invented |
-| Email and push delivery | Disabled; roadmap only |
+[Architecture](docs/architecture.md) · [Installation](docs/installation.md) · [Contract v1](docs/contract-v1.md) · [Verification](docs/verification.md)
 
-Demo: https://leewaypb-library.leeohsunshine.chatgpt.site — owner-protected demo; authenticated `/v1` API is reachable without Sites gating. Load sample events, mark read, refresh both hosts, reload the page, revoke sample access, mount/unmount during playback. Synthetic fixtures are separate from production subjects and events. Never interpret the demo’s two panels as implemented app integrations.
+## What is included
 
-## Project boundaries
+- Shadow DOM notification island with a bell, inbox, read/unread state and preferences.
+- Browser transport and a server-only event producer helper.
+- A Worker service backed by D1 for notification persistence.
+- Identity validation and per-destination authorization.
+- An owner-protected demonstration using synthetic fixtures.
 
-- `packages/notifications`: pinned package `@leewaypb/notifications@0.1.0`; browser island/transport, server-only producer helper.
-- `service`: event ingestion, persistent inbox/preferences/read status, identity validation and destination authorization.
-- `db/schema.ts`, `drizzle`: owned notification schema, never another app’s schema.
-- `demo`: synthetic owner demonstration, playback fixture and separate owner identity namespace.
-- `docs`: installation, architecture, contracts, verified baseline, future delivery path, individual worker handoffs.
+## Engineering highlights
 
-Use `npm ci`, `npm test`, `npm run build`, `npm run pack:notifications`. Generated deployment is a Worker, not a React application. Drizzle owns schema migrations. No runtime DDL.
+| Concern | Approach |
+| --- | --- |
+| Host compatibility | Framework-independent UI with Shadow DOM style isolation |
+| Data ownership | Dedicated notification schema; no direct writes into another app's data |
+| Authorization | Identity validation plus destination-specific access checks |
+| Integration contracts | Versioned event/transport boundaries and explicit worker handoffs |
+| Safe delivery scope | In-app notifications implemented; email and push remain disabled |
+| Verification | Service, Worker and UI-island tests with controlled fixtures |
 
-See [installation](docs/installation.md), [architecture](docs/architecture.md), [contract](docs/contract-v1.md), [verification](docs/verification.md), and [curation](docs/curation.md).
+## Development
 
-Activation coordination: [Replay readiness](docs/replay-activation-readiness.md).
+```sh
+npm ci
+npm test
+npm run build
+npm run pack:notifications
+```
+
+The package is `@leewaypb/notifications@0.1.0`. The build produces a Worker application; Drizzle owns schema migrations. See [installation](docs/installation.md) for configuration and host mounting instructions.
+
+| Path | Contents |
+| --- | --- |
+| [packages/notifications/](packages/notifications/) | UI island, transport, producer and type declarations |
+| [service/](service/) | Event ingestion, authorization and persistence |
+| [db/](db/), [drizzle/](drizzle/) | Owned schema and migrations |
+| [demo/](demo/) | Synthetic demonstration and playback fixture |
+| [tests/](tests/) | Automated tests |
+| [docs/handoffs/](docs/handoffs/) | Application-specific integration contracts |
+
+## Integration status
+
+A package, a service and a host integration have separate release states. The Common repository documents Replay's adapter and activation handoff; verify current host activation in the consuming app. Coaching, PaddleLog and Pickle Point handoff documents describe integration work, not proof of deployed integrations.
+
+[Open the demonstration](https://leewaypb-library.leeohsunshine.chatgpt.site) — owner-protected, with synthetic data. Its two panels are fixtures, not two production applications.
+
+See [Replay activation readiness](docs/replay-activation-readiness.md), [verification limits](docs/verification.md) and the [delivery roadmap](docs/delivery-roadmap.md). Email and push delivery are disabled. No registry publication or third-party delivery provider is implied.
+
+## Related projects
+
+| Project | Responsibility |
+| --- | --- |
+| [PaddleLog](https://github.com/BenRL91/PaddleLog) | Equipment, maintenance and usage history |
+| [Pickle Point](https://github.com/BenRL91/Pickle-Point) | Scoring, games and sessions |
+| [Leeway Coaching](https://github.com/BenRL91/Leeway-Coaching) | Booking and breakdown fulfillment |
+| [Leeway Replay](https://github.com/BenRL91/Leeway-Replay) | Private video reviews and discussion |
+| [Leeway Common](https://github.com/BenRL91/Leeway-Common) | Shared notification components and service |
+
+Each repository has its own release lifecycle. Shared identity does not grant access to another app's private data.
